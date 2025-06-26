@@ -53,5 +53,39 @@ const getBookById = async (req, res) => {
   }
 };
 
+// PUT /api/books/:id
+const updateBook = async (req, res) => {
+  try {
+    const bookId = req.params.id;
 
-module.exports = { addBook, getAllBooks, getBookById };
+    const book = await Book.findById(bookId);
+
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+
+    // Check if the logged-in user is the book's author or an admin
+    if (book.authorId.toString() !== req.user._id.toString() && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied: you can only update your own books" });
+    }
+
+    const updatedData = req.body;
+
+    const updatedBook = await Book.findByIdAndUpdate(bookId, updatedData, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      message: "✅ Book updated successfully",
+      updatedBook,
+    });
+  } catch (err) {
+    console.error("❌ Error updating book:", err.message);
+    res.status(500).json({ message: "Something went wrong", error: err.message });
+  }
+};
+
+
+
+module.exports = { addBook, getAllBooks, getBookById, updateBook };
