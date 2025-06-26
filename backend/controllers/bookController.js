@@ -28,4 +28,16 @@ const addBook = async (req, res) => {
   }
 };
 
-module.exports = { addBook };
+// GET /api/books
+const getAllBooks = async (req, res) => {
+  try {
+    const books = await Book.find().populate("authorId", "name email");
+    res.status(200).json({ books });
+  } catch (err) {
+    console.error("❌ Failed to fetch books:", err.message);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+
+module.exports = { addBook, getAllBooks };
