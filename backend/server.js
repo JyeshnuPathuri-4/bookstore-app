@@ -5,16 +5,20 @@ const cors = require("cors");
 dotenv.config();
 const app = express();
 
-const authRoutes = require("./routes/authRoutes");
-app.use("/api/auth", authRoutes);
-
-
 const connectDB = require("./config/db");
-connectDB();
+connectDB(); // ✅ Connect to DB FIRST
 
+// ✅ Apply middleware BEFORE routes
 app.use(cors());
 app.use(express.json());
 
+// ✅ Now define your routes
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+
+// ✅ Optional: test route
 app.get("/", (req, res) => {
   res.send("✅ Server is running!");
 });

@@ -1,32 +1,28 @@
+// models/User.js
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  firebaseUid: {
-    type: String,
-    required: true,
-    unique: true,
+const userSchema = new mongoose.Schema(
+  {
+    uid: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      default: "Anonymous",
+    },
+    role: {
+      type: String,
+      enum: ["user", "author", "admin"],
+      default: "user",
+    },
   },
-  name: {
-    type: String,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    enum: ["buyer", "author", "admin"],
-    default: "buyer",
-  },
-  bio: {
-    type: String,
-  },
-  profileImage: {
-    type: String, // URL to image
-  },
-}, {
-  timestamps: true, // adds createdAt and updatedAt
-});
+  { timestamps: true }
+);
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+module.exports = mongoose.model("User", userSchema);
