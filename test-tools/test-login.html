@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Firebase Login Test</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  </head>
+  <body>
+    <h2>Login with Firebase</h2>
+    <input type="email" id="email" placeholder="Email" /><br /><br />
+    <input type="password" id="password" placeholder="Password" /><br /><br />
+    <button onclick="login()">Login</button>
+
+    <pre id="output"></pre>
+
+    <script>
+      // ✅ Replace with your actual config
+      var firebaseConfig = {
+          apiKey: "AIzaSyB8l7htwI20A2Jj2t71SxGTuTrRigCMdo4",
+          authDomain: "bookstore-app-1e593.firebaseapp.com",
+          projectId: "bookstore-app-1e593",
+          storageBucket: "bookstore-app-1e593.firebasestorage.app",
+          messagingSenderId: "97487418362",
+          appId: "1:97487418362:web:5e42f254f97eb7651e2a43",
+          measurementId: "G-14HBFJLTGH"
+};
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      function login() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            return userCredential.user.getIdToken();
+          })
+          .then((token) => {
+            document.getElementById("output").textContent = "ID Token:\n" + token;
+          })
+          .catch((error) => {
+            document.getElementById("output").textContent = "❌ Error:\n" + error.message;
+          });
+      }
+    </script>
+  </body>
+</html>
