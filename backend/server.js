@@ -15,8 +15,10 @@ app.use(express.json());
 // ✅ Now define your routes
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const bookRoutes = require("./routes/bookRoutes");
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/books", bookRoutes);
 
 // ✅ Optional: test route
 app.get("/", (req, res) => {
