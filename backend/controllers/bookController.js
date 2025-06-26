@@ -86,6 +86,33 @@ const updateBook = async (req, res) => {
   }
 };
 
+// DELETE /api/books/:id
+const deleteBook = async (req, res) => {
+  try {
+    const bookId = req.params.id;
+    const user = req.user;
+
+    const book = await Book.findById(bookId);
+
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+
+    // Only the author who added the book or an admin can delete
+    if (book.authorId.toString() !== user._id.toString() && user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied: cannot delete this book" });
+    }
+
+    await Book.findByIdAndDelete(bookId);
+
+    res.status(200).json({ message: "✅ Book deleted successfully" });
+  } catch (err) {
+    console.error("❌ Error deleting book:", err.message);
+    res.status(500).json({ message: "Something went wrong", error: err.message });
+  }
+};
 
 
-module.exports = { addBook, getAllBooks, getBookById, updateBook };
+
+
+module.exports = { addBook, getAllBooks, getBookById, updateBook, deleteBook };
